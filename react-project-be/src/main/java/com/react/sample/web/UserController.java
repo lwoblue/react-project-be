@@ -117,9 +117,9 @@ public class UserController {
 		try {
 			user = userMappr.duplicateCheck(user.getEmail());
 			if(user != null)
-				result = gson.toJson("true");
-			else
 				result = gson.toJson("false");
+			else
+				result = gson.toJson("true");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
