@@ -1,6 +1,7 @@
 package com.react.sample.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.react.sample.mapper.UserMapper;
 import com.react.sample.service.vo.UserVO;
 
@@ -32,10 +35,10 @@ public class UserController {
 		return userMappr.userList();
 	}
 	
-	@PostMapping
-	void insertUser(@RequestBody UserVO user) {
-		userMappr.insertUser(user);
-	}
+//	@PostMapping
+//	void insertUser(@RequestBody UserVO user) {
+//		userMappr.insertUser(user);
+//	}
 	
 	@GetMapping("/{id}")
 	public UserVO fetchUserByID(@PathVariable int id) {
@@ -63,5 +66,64 @@ public class UserController {
 	public void deleteUser(@PathVariable int id) {
 		userMappr.deleteUser(id);
 		System.out.println("유저 삭제 성공");
+	}
+	
+
+	@PostMapping(value="/login")
+	public String login(@RequestBody Map req) {
+		Gson gson = new GsonBuilder().create();
+		UserVO user = new UserVO();
+		
+		user.setEmail(String.valueOf(req.get("email")));
+		user.setPassword(String.valueOf(req.get("pwd")));
+		
+		UserVO loginUser = userMappr.login(user);
+		
+		if(loginUser == null) {
+			String result = gson.toJson("로그인에 실패했습니다.");
+			return result;
+		} else {
+			String result = gson.toJson(loginUser);
+			return result;
+		}
+	}
+	
+	@PostMapping(value="/signUp")
+	public String insertUser(@RequestBody Map req) {
+		Gson gson = new GsonBuilder().create();
+		UserVO inserUser = new UserVO();
+		
+		inserUser.setEmail(String.valueOf(req.get("email")));
+		inserUser.setPassword(String.valueOf(req.get("pwd")));
+		inserUser.setUserName(String.valueOf(req.get("username")));
+		
+		try {
+			userMappr.insertUser(inserUser);
+			return gson.toJson("true");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return gson.toJson("false");
+		}
+	}
+	
+	@PostMapping(value="/duplicateCheck")
+	public String duplicateCheck(@RequestBody Map req) {
+		Gson gson = new GsonBuilder().create();
+		UserVO user = new UserVO();
+		String result = null;
+		
+		user.setEmail(String.valueOf(req.get("email")));
+		
+		try {
+			user = userMappr.duplicateCheck(user.getEmail());
+			if(user != null)
+				result = gson.toJson("true");
+			else
+				result = gson.toJson("false");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 }

@@ -32,4 +32,17 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="login" resultType="com.react.sample.service.vo.UserVO" parameterType="com.react.sample.service.vo.UserVO">
+		SELECT id, userName
+		FROM users
+		WHERE email = #{email}
+		AND password = #{password}
+	</select>
+	
+	<select id="duplicateCheck" resultType="com.react.sample.service.vo.UserVO" parameterType="String">
+		SELECT email
+		FROM users
+		WHERE email = #{email}
+	</select>
+	
 </mapper>

@@ -15,4 +15,7 @@ public interface UserMapper {
 	void updateUser(UserVO user);
 	void insertUser(UserVO user);
 	void deleteUser(int id);
+	
+	UserVO login(UserVO userVO);
+	UserVO duplicateCheck(String email);
 }
