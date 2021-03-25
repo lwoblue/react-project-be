@@ -35,15 +35,22 @@ public class UserController {
 		return userMappr.userList();
 	}
 	
-//	@PostMapping
-//	void insertUser(@RequestBody UserVO user) {
-//		userMappr.insertUser(user);
+	@PostMapping
+	void insertUser(@RequestBody UserVO user) {
+		userMappr.insertUser(user);
+	}
+	
+//	@GetMapping("/{id}")
+//	public UserVO fetchUserByID(@PathVariable int id) {
+//		System.out.println(userMappr.fatchUserByID(id));
+//		UserVO fetcUser = userMappr.fatchUserByID(id);
+//		return fetcUser;
 //	}
 	
-	@GetMapping("/{id}")
-	public UserVO fetchUserByID(@PathVariable int id) {
-		System.out.println(userMappr.fatchUserByID(id));
-		UserVO fetcUser = userMappr.fatchUserByID(id);
+	@GetMapping("/{email}")
+	public UserVO fetchUserByID(@PathVariable String email) {
+		System.out.println(userMappr.fatchUserByID(email));
+		UserVO fetcUser = userMappr.fatchUserByID(email);
 		return fetcUser;
 	}
 	
@@ -52,22 +59,22 @@ public class UserController {
 		
 		UserVO updateUser = user;
 		
-		System.out.println("업데이트 유저 ----->" + updateUser);
-		
-		updateUser.setFirstName(user.getFirstName());
-		updateUser.setLastName(user.getLastName());
-		updateUser.setAge(user.getAge());
-		updateUser.setSalary(user.getSalary());
+		updateUser.setUserName(user.getUserName());
 
 		userMappr.updateUser(updateUser);
 	}
 	
-	@DeleteMapping("/{id}")
-	public void deleteUser(@PathVariable int id) {
-		userMappr.deleteUser(id);
+//	@DeleteMapping("/{id}")
+//	public void deleteUser(@PathVariable int id) {
+//		userMappr.deleteUser(id);
+//		System.out.println("유저 삭제 성공");
+//	}
+	
+	@DeleteMapping("/{email}")
+	public void deleteUser(@PathVariable String email) {
+		userMappr.deleteUser(email);
 		System.out.println("유저 삭제 성공");
 	}
-	
 
 	@PostMapping(value="/login")
 	public String login(@RequestBody Map req) {
@@ -89,16 +96,18 @@ public class UserController {
 	}
 	
 	@PostMapping(value="/signUp")
-	public String insertUser(@RequestBody Map req) {
+	public String signUp(@RequestBody Map req) {
 		Gson gson = new GsonBuilder().create();
-		UserVO inserUser = new UserVO();
+		UserVO insertUser = new UserVO();
 		
-		inserUser.setEmail(String.valueOf(req.get("email")));
-		inserUser.setPassword(String.valueOf(req.get("pwd")));
-		inserUser.setUserName(String.valueOf(req.get("username")));
+		insertUser.setEmail(String.valueOf(req.get("email")));
+		insertUser.setPassword(String.valueOf(req.get("pwd")));
+		insertUser.setUserName(String.valueOf(req.get("username")));
+		insertUser.setPhotoURL("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3SvtTRgIX1lfL2YSByB8kwoVkVYQB93It2g&usqp=CAU");
+		insertUser.setDeleteYN("n");
 		
 		try {
-			userMappr.insertUser(inserUser);
+			userMappr.signUp(insertUser);
 			return gson.toJson("true");
 		} catch (Exception e) {
 			e.printStackTrace();
