@@ -9,6 +9,9 @@ public class UserVO {
 	String lastName;
 	int age;
 	int salary;
+	String email;
+	String photoURL;
+	String deleteYN;
 	
 	public int getId() {
 		return id;
@@ -51,6 +54,24 @@ public class UserVO {
 	}
 	public void setSalary(int salary) {
 		this.salary = salary;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPhotoURL() {
+		return photoURL;
+	}
+	public void setPhotoURL(String photoURL) {
+		this.photoURL = photoURL;
+	}
+	public String getDeleteYN() {
+		return deleteYN;
+	}
+	public void setDeleteYN(String deleteYN) {
+		this.deleteYN = deleteYN;
 	}
 	
 }
