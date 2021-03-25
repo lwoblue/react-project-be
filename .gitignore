@@ -1,2 +1,8 @@
-### STS ###
+# STS
 .project
+
+# node - testfolder
+# dependencies
+/test/node_modules
+/test/firebaseConfig.json
+/test/serviceAccountKey.json
