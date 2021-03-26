@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -30,11 +32,16 @@ public class UserController {
 	@GetMapping
 	public List<UserVO> userList(){
 		System.out.println(userMappr.userList());
-		System.out.println("유저리스트 출력 성공");
+		System.out.println("userList 유저리스트 출력 성공");
 		
 		return userMappr.userList();
 	}
 	
+	@GetMapping("/{keyword}")
+	public List<UserVO> searchUser(@PathVariable String keyword) {
+		return userMappr.searchUser(keyword);
+	}
+
 	@PostMapping
 	void insertUser(@RequestBody UserVO user) {
 		userMappr.insertUser(user);
@@ -47,9 +54,9 @@ public class UserController {
 //		return fetcUser;
 //	}
 	
-	@GetMapping("/{email}")
+	@GetMapping("/personal-information/{email}")
 	public UserVO fetchUserByID(@PathVariable String email) {
-		System.out.println(userMappr.fatchUserByID(email));
+		System.out.println("fetchUserByID-->" + userMappr.fatchUserByID(email));
 		UserVO fetcUser = userMappr.fatchUserByID(email);
 		return fetcUser;
 	}
@@ -83,11 +90,9 @@ public class UserController {
 		
 		user.setEmail(String.valueOf(req.get("email")));
 		user.setPassword(String.valueOf(req.get("pwd")));
-		
 		UserVO loginUser = userMappr.login(user);
-		
 		if(loginUser == null) {
-			String result = gson.toJson("로그인에 실패했습니다.");
+			String result = gson.toJson("false");
 			return result;
 		} else {
 			String result = gson.toJson(loginUser);
@@ -135,4 +140,5 @@ public class UserController {
 		
 		return result;
 	}
+	
 }

@@ -12,6 +12,7 @@ public class UserVO {
 	String email;
 	String photoURL;
 	String deleteYN;
+	String keyword;
 	
 	public int getId() {
 		return id;
@@ -72,6 +73,12 @@ public class UserVO {
 	}
 	public void setDeleteYN(String deleteYN) {
 		this.deleteYN = deleteYN;
+	}
+	public String getKeyword() {
+		return keyword;
+	}
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 	
 }

@@ -10,6 +10,7 @@ import com.react.sample.service.vo.UserVO;
 public interface UserMapper {
 	
 	List<UserVO> userList();
+	List<UserVO> searchUser(String keyword);
 //	UserVO fatchUserByID(int id);
 	UserVO fatchUserByID(String email);
 	
