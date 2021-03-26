@@ -78,10 +78,10 @@ function updateOrCreateUser(userId, email, displayName, photoURL) {
           if (err) throw err;
           console.log("Connected!");
           // random string pwd
-          var randPwd = Math.random().toString(36).substr(2,11);
+          var randPwd = Math.random().toString(36).substr(2, 11);
           // userId, email, displayName, photoURL
           var sql = `INSERT INTO users ( email, userName, photoURL, deleteYN ,provider,password) VALUES (?,?,?, 'n','KAKAO',?)`;
-          var params = [email, displayName, photoURL,randPwd];
+          var params = [email, displayName, photoURL, randPwd];
           con.query(sql, params, function (err, result) {
             if (err) throw err;
             console.log("1 record inserted");
@@ -143,7 +143,6 @@ app.post("/users/verifyToken", (req, res) => {
   createFirebaseToken(token, uid, email, name, photoURL).then(
     (firebaseToken) => {
       console.log(`Returning firebase token to user: ${firebaseToken}`);
-
       res.send({
         firebase_token: firebaseToken,
         name: name,
@@ -153,10 +152,44 @@ app.post("/users/verifyToken", (req, res) => {
   );
 });
 
-app.post("/users/loginGoogle", (req, res)=>{
+app.post("/users/loginGoogle", (req, res) => {
   console.log("here in!!!!");
-  console.log(req);
-})
+  console.log(req.body);
+  // put data in mySql DB
+  con.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected! DB for post google user data");
+    // check is exist
+    var sql_check = `SELECT email,id FROM users where email=(?)`;
+    var params = [req.body.email];
+    con.query(sql_check, params, function (err, result_check) {
+      if (err) throw err;
+      console.log("1 record selected:",result_check);
+      if(result_check.length == 0){
+        console.log("no data");
+        // insert data
+        // random string pwd
+        var randPwd = Math.random().toString(36).substr(2, 11);
+        var sql = `INSERT INTO users ( email, userName, photoURL, deleteYN ,provider,password) VALUES (?,?,?, 'n','Google',?)`;
+        var params = [req.body.email,req.body.username,req.body.photoURL,randPwd,];
+        con.query(sql, params, function (err, result) {
+          if (err) throw err;
+          console.log("1 record inserted");
+        });
+      }else{
+        console.log("yes data");
+        // update data (photoURL userName)
+        var sql_update = `UPDATE users SET photoURL= (?), userName=(?) WHERE id=(?)`;
+        console.log(result_check[0].id);
+        var params = [req.body.photoURL,req.body.username,result_check[0].id];
+        con.query(sql_update, params, function (err, result) {
+          if (err) throw err;
+          console.log("1 record updated");
+        });   
+      }
+    });
+  });
+});
 
 // Start the server
 const server = app.listen(process.env.PORT || "8090", () => {
