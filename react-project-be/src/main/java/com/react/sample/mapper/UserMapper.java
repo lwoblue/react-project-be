@@ -10,9 +10,16 @@ import com.react.sample.service.vo.UserVO;
 public interface UserMapper {
 	
 	List<UserVO> userList();
-	UserVO fatchUserByID(int id);
+	List<UserVO> searchUser(String keyword);
+//	UserVO fatchUserByID(int id);
+	UserVO fatchUserByID(String email);
 	
 	void updateUser(UserVO user);
 	void insertUser(UserVO user);
-	void deleteUser(int id);
+//	void deleteUser(int id);
+	void deleteUser(String email);
+	
+	UserVO login(UserVO userVO);
+	void signUp(UserVO user);
+	UserVO duplicateCheck(String email);
 }
