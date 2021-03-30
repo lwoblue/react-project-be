@@ -71,7 +71,7 @@ function updateOrCreateUser(userId, email, displayName, photoURL) {
       console.log("1 record selected");
       // if user DB exist
       if(result_idx.length == 1){
-        var sql_update = `UPDATE users SET photoURL= (?), userName=(?) WHERE id=(?)`;
+        var sql_update = `UPDATE users SET photoURL= (?), userName=(?), logdate=sysdate() WHERE id=(?)`;
         console.log(result_idx[0].id);
         var params = [updateParams["photoURL"],updateParams["displayName"],result_idx[0].id];
         con.query(sql_update, params, function (err, result) {
@@ -96,8 +96,8 @@ function updateOrCreateUser(userId, email, displayName, photoURL) {
           console.log("Connected!");
           // random string pwd
           var randPwd = Math.random().toString(36).substr(2, 11);
-          // userId, email, displayName, photoURL
-          var sql = `INSERT INTO users ( email, userName, photoURL, deleteYN ,provider,password) VALUES (?,?,?, 'n',?,?)`;
+          // userId, email, displayName, photoURL logdate=sysdate()
+          var sql = `INSERT INTO users ( email, userName, photoURL, deleteYN ,provider,password, logdate) VALUES (?,?,?, 'n',?,?, sysdate())`;
           var params = [email, displayName, photoURL,updateParams["provider"], randPwd];
           con.query(sql, params, function (err, result) {
             if (err) throw err;
@@ -186,7 +186,7 @@ app.post("/users/loginGoogle", (req, res) => {
         // insert data
         // random string pwd
         var randPwd = Math.random().toString(36).substr(2, 11);
-        var sql = `INSERT INTO users ( email, userName, photoURL, deleteYN ,provider,password) VALUES (?,?,?, 'n','Google',?)`;
+        var sql = `INSERT INTO users ( email, userName, photoURL, deleteYN ,provider,password, logdate) VALUES (?,?,?, 'n','Google',?, sysdate())`;
         var params = [req.body.email,req.body.username,req.body.photoURL,randPwd,];
         con.query(sql, params, function (err, result) {
           if (err) throw err;
@@ -195,7 +195,7 @@ app.post("/users/loginGoogle", (req, res) => {
       }else{
         console.log("yes data");
         // update data (photoURL userName)
-        var sql_update = `UPDATE users SET photoURL= (?), userName=(?) WHERE id=(?)`;
+        var sql_update = `UPDATE users SET photoURL= (?), userName=(?), logdate=sysdate() WHERE id=(?)`;
         console.log(result_check[0].id);
         var params = [req.body.photoURL,req.body.username,result_check[0].id];
         con.query(sql_update, params, function (err, result) {
