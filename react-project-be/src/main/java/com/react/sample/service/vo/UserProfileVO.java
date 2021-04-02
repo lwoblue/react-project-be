@@ -1,19 +1,18 @@
 package com.react.sample.service.vo;
 
-import java.io.InputStream;
-import java.util.UUID;
+import java.sql.Blob;
 
 public class UserProfileVO {
 	
-	UUID uuid;
+	String uuid;
 	String orgname;
 	String userId;
 	String regdate;
-	InputStream imageFile;
-	public UUID getUuid() {
+	String imageFile;
+	public String getUuid() {
 		return uuid;
 	}
-	public void setUuid(UUID uuid) {
+	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 	public String getOrgname() {
@@ -34,11 +33,11 @@ public class UserProfileVO {
 	public void setRegdate(String regdate) {
 		this.regdate = regdate;
 	}
-	public InputStream getImageFile() {
+	public String getImageFile() {
 		return imageFile;
 	}
-	public void setImageFile(InputStream imageFile) {
-		this.imageFile = imageFile;
+	public void setImageFile(String array) {
+		this.imageFile = array;
 	}
 	
 	

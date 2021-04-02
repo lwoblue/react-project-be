@@ -3,7 +3,7 @@ package com.react.sample.service;
 import com.react.sample.service.vo.UserProfileVO;
 
 public interface UserProfileService{
-	public boolean existProfileImage(String id);
-	public UserProfileVO updateProfile(UserProfileVO userProfile);
-	public UserProfileVO insertProfile(UserProfileVO userProfile);
+	public UserProfileVO selectUserProfile(String id);
+	public void updateProfile(UserProfileVO userProfile);
+	public void insertProfile(UserProfileVO userProfile);
 }
