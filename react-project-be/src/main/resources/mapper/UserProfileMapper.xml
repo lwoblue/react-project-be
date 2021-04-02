@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.react.sample.mapper.UserProfileMapper">
-		
-	<!-- <update id="updateUser" parameterType="com.react.sample.service.vo.UserVO">
-		UPDATE users
-		SET userName = #{userName}
-		WHERE id = #{id}
-	</update>
-	<insert id="signUp" parameterType="com.react.sample.service.vo.UserVO">
-		INSERT INTO users(userName, password, email, photoURL, deleteYN)
-		VALUES(#{userName}, #{password}, #{email}, #{photoURL}, #{deleteYN})
-	</insert> -->
-	
-	<select id="existProfileImage" resultType="com.react.sample.service.vo.UserProfileVO" parameterType="String">
+<mapper namespace="com.react.sample.mapper.UserProfileMapper">	
+	<select id="selectUserProfile" resultType="com.react.sample.service.vo.UserProfileVO" parameterType="String">
+		<![CDATA[
 		SELECT *
 		FROM thumb
-		WHERE userId = #{id}
+		WHERE userId = #{userId}
+		]]>
 	</select>
-	
+	<update id="updateProfile" parameterType="com.react.sample.service.vo.UserProfileVO">
+		<![CDATA[
+		UPDATE thumb
+		SET imageFile = #{imageFile}
+		WHERE uuid = #{uuid}
+		AND userId = #{userId}
+		
+		]]>
+	</update>
+	<insert id="insertProfile" parameterType="com.react.sample.service.vo.UserProfileVO">
+		<![CDATA[
+		INSERT INTO thumb(uuid, orgname, userId, imageFile)
+		VALUES(#{uuid}, #{orgname}, #{userId}, #{imageFile})
+		]]>
+	</insert> 
 </mapper>
