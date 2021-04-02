@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-//@Service
-////public class UserService {
-////	public Map<String, Object> selectImageFile(Map<String, Object> fileParam) throws Exception;
-////}
+
+public interface UserService {
+	public Map<String, Object> selectImageFile(Map<String, Object> fileParam) throws Exception;
+}

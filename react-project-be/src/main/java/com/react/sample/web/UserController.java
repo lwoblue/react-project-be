@@ -3,6 +3,8 @@ package com.react.sample.web;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,10 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -147,35 +146,4 @@ public class UserController {
 		
 		return result;
 	}
-	
-	@PostMapping(value = "/photo/upload")
-    public Map<String, Object> upload(@RequestParam("file") MultipartFile multipartFile) {		
-        UUID uid = UUID.randomUUID();
-//        File targetFile = new File("src/main/resources/profileimgs/"+"userId"+uid.toString()); //    ./ dir
-        File targetFile = new File("c:/tmp/"+"userId"+multipartFile.getOriginalFilename()); //    ./ dir
-        File dir = new File("c:/tmp");
-        // file size 설정 - 제한할것
-        
-        // field randomUID / originalFileName / binary... / email(forign) / sysdate()
-        System.out.println(targetFile);
-        try {
-        	if(!dir.mkdir()) {
-        		dir.delete();
-        		targetFile.mkdir();
-        	};        	
-            InputStream fileStream = multipartFile.getInputStream(); // -> byte type change
-            //insert
-            FileUtils.copyInputStreamToFile(fileStream, targetFile);
-            // direct 반환
-            // mkdir / file 생성 -> 바로 변환 / 파일명겹치는 경우에 _profile naming
-
-        } catch (IOException e) {
-            FileUtils.deleteQuietly(targetFile);
-            e.printStackTrace();
-        }
-
-        Map<String, Object> m = new HashMap<>();
-        m.put("errorCode", 10);
-        return m;
-    }
 }

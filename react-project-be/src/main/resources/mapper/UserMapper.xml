@@ -69,5 +69,5 @@
 	<insert id="signUp" parameterType="com.react.sample.service.vo.UserVO">
 		INSERT INTO users(userName, password, email, photoURL, deleteYN)
 		VALUES(#{userName}, #{password}, #{email}, #{photoURL}, #{deleteYN})
-	</insert>
+	</insert>	
 </mapper>
