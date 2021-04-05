@@ -3,10 +3,29 @@
 
 <mapper namespace="com.react.sample.mapper.MessageMapper">
 	
-	<select id="messageList" resultType="com.react.sample.service.vo.MessageVO" parameterType="String">
+	<select id="messageList" resultType="com.react.sample.service.vo.MessageVO" parameterType="Map">
 		SELECT *
 		FROM messages
-		WHERE recipient = #{userId}
+		WHERE recipient = #{recipient}
+		AND title LIKE CONCAT('%', #{searchInput}, '%')
+		AND deleteYn = "n"
 	</select>
+	
+	<select id="detailMessage" resultType="com.react.sample.service.vo.MessageVO" parameterType="int">
+		SELECT *
+		FROM messages
+		WHERE uuid = #{uuid}
+	</select>
+	
+	<update id="deleteMessage" parameterType="int">
+		UPDATE messages
+		SET deleteYn = 'y'
+		WHERE uuid = #{uuid}
+	</update>
+	
+	<insert id="insertMessage" parameterType="com.react.sample.service.vo.MessageVO">
+		INSERT INTO messages(title, content, sender, recipient, date, deleteYn)
+		VALUES(#{title}, #{content}, #{sender}, #{recipient}, sysdate(), "n")
+	</insert>
 	
 </mapper>

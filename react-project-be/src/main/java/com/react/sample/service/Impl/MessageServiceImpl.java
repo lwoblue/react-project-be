@@ -15,9 +15,27 @@ public class MessageServiceImpl implements MessageService{
 	MessageMapper messageMapper;
 
 	@Override
-	public List<MessageVO> messageList(String recieveId) {
+	public List<MessageVO> messageList(String recipient, String searchInput) {
 		// TODO Auto-generated method stub
-		return messageMapper.messageList(recieveId);
+		return messageMapper.messageList(recipient, searchInput);
+	}
+
+	@Override
+	public MessageVO detailMessage(int uuid) {
+		// TODO Auto-generated method stub
+		return messageMapper.detailMessage(uuid);
+	}
+
+	@Override
+	public boolean deleteMessage(int uuid) {
+		// TODO Auto-generated method stub
+		return messageMapper.deleteMessage(uuid);
+	}
+
+	@Override
+	public boolean insertMessage(MessageVO message) {
+		// TODO Auto-generated method stub
+		return messageMapper.insertMessage(message);
 	}
 
 }

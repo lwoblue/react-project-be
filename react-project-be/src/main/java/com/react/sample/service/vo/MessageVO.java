@@ -2,7 +2,7 @@ package com.react.sample.service.vo;
 
 public class MessageVO {
 	
-	int id;
+	int uuid;
 	int index;
 	String sender;
 	String recipient;
@@ -10,11 +10,11 @@ public class MessageVO {
 	String content;
 	String date;
 	
-	public int getId() {
-		return id;
+	public int getUuid() {
+		return uuid;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setUuid(int uuid) {
+		this.uuid = uuid;
 	}
 	public int getIndex() {
 		return index;
@@ -55,7 +55,7 @@ public class MessageVO {
 	
 	@Override
 	public String toString() {
-		return "MessageVO [id=" + id + ", index=" + index + ", sender=" + sender + ", recipient=" + recipient
+		return "MessageVO [uuid=" + uuid + ", index=" + index + ", sender=" + sender + ", recipient=" + recipient
 				+ ", title=" + title + ", content=" + content + ", date=" + date + "]";
 	}
 	
