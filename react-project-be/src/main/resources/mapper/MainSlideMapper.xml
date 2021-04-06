@@ -3,7 +3,7 @@
 
 <mapper namespace="com.react.sample.mapper.MainSlideMapper">	
 
-	<select id="searchSlideImageList" resultType="java.util.ArrayList">
+	<select id="searchSlideImageList" resultType="java.util.HashMap">
 		<![CDATA[
 			SELECT REG_SEQ
 				, FILE_NAME
@@ -17,7 +17,7 @@
 	
 	<insert id="insertSlideImageList" parameterType="java.util.HashMap">
 		<![CDATA[
-		INSERT INTO thumb
+		INSERT INTO REACT.SLIDE
 		(
 		  FILE_NAME
 		, FILE_ORG_NAME
@@ -44,14 +44,14 @@
 			FILE_TYPE = #{FILE_TYPE},
 			FILE_SIZE = #{FILE_SIZE},
 			FILE_DATA = #{FILE_DATA}
-		WHERE REG_SEQ = #{id}		
+		WHERE REG_SEQ = #{ID}		
 		]]>
 	</update>
 	
 	<delete id="deleteSlideImageList" parameterType="java.util.HashMap">
 		<![CDATA[
 		DELETE FROM REACT.SLIDE
-		WHERE REG_SEQ = #{id}		
+		WHERE REG_SEQ = #{ID}		
 		]]>
 	</delete>
 	 

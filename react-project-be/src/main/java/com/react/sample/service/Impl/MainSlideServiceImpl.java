@@ -18,7 +18,7 @@ public class MainSlideServiceImpl implements MainSlideService {
 	@Override
 	public Map<String, Object> searchSlideImageList() throws Exception {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("resultDate", mainSlideMapper.searchSlideImageList());
+		resultMap.put("resultData", mainSlideMapper.searchSlideImageList());
 		return resultMap;
 	}
 
