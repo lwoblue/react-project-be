@@ -2,14 +2,22 @@
 <!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.react.sample.mapper.UserProfileMapper">	
-	<select id="selectUserProfile" resultType="com.react.sample.service.vo.UserProfileVO" parameterType="String">
+
+	<select id="selectUserProfileCnt" resultType="Integer" parameterType="String">
+		<![CDATA[
+		SELECT count(*) cnt
+		FROM thumb
+		WHERE userId = #{userId}
+		]]>
+	</select>
+	<select id="selectUserProfile" resultType="java.util.HashMap" parameterType="String">
 		<![CDATA[
 		SELECT *
 		FROM thumb
 		WHERE userId = #{userId}
 		]]>
 	</select>
-	<update id="updateProfile" parameterType="com.react.sample.service.vo.UserProfileVO">
+	<update id="updateProfile" parameterType="java.util.HashMap">
 		<![CDATA[
 		UPDATE thumb
 		SET imageFile = #{imageFile},
@@ -19,7 +27,7 @@
 		WHERE userId = #{userId}		
 		]]>
 	</update>
-	<insert id="insertProfile" parameterType="com.react.sample.service.vo.UserProfileVO">
+	<insert id="insertProfile" parameterType="java.util.HashMap">
 		<![CDATA[
 		INSERT INTO thumb(uuid, orgname, userId, imageFile)
 		VALUES(#{uuid}, #{orgname}, #{userId}, #{imageFile})

@@ -1,11 +1,12 @@
 package com.react.sample.service.Impl;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.react.sample.mapper.UserProfileMapper;
 import com.react.sample.service.UserProfileService;
-import com.react.sample.service.vo.UserProfileVO;
 
 @Service
 public class UserProfileServiceImpl implements UserProfileService{
@@ -14,17 +15,22 @@ public class UserProfileServiceImpl implements UserProfileService{
 	UserProfileMapper userProfileMapper;
 
 	@Override
-	public UserProfileVO selectUserProfile(String userId) {
+	public HashMap<String, Object> selectUserProfile(String userId) {
 		return userProfileMapper.selectUserProfile(userId);
 	}
 
 	@Override
-	public void updateProfile(UserProfileVO userProfile) {
+	public int selectUserProfileCnt(String userId) {
+		return userProfileMapper.selectUserProfileCnt(userId);
+	}
+	
+	@Override
+	public void updateProfile(HashMap<String, Object> userProfile) {
 		userProfileMapper.updateProfile(userProfile);
 	}
 
 	@Override
-	public void insertProfile(UserProfileVO userProfile) {
+	public void insertProfile(HashMap<String, Object> userProfile) {
 		userProfileMapper.insertProfile(userProfile);
 	}
 }
