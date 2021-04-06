@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.react.sample.mapper.MainSlideMapper">	
+
+	<select id="searchSlideImageList" resultType="java.util.ArrayList">
+		<![CDATA[
+			SELECT REG_SEQ
+				, FILE_NAME
+				, FILE_ORG_NAME
+				, FILE_TYPE
+				, FILE_SIZE
+				, FILE_DATA
+			FROM REACT.SLIDE
+		]]>
+	</select>
+	
+	<insert id="insertSlideImageList" parameterType="java.util.HashMap">
+		<![CDATA[
+		INSERT INTO thumb
+		(
+		  FILE_NAME
+		, FILE_ORG_NAME
+		, FILE_TYPE
+		, FILE_SIZE
+		, FILE_DATA
+		)
+		VALUES
+		(
+		  #{FILE_NAME}
+		, #{FILE_ORG_NAME}
+		, #{FILE_TYPE}
+		, #{FILE_SIZE}
+		, #{FILE_DATA}
+		)
+		]]>
+	</insert>
+		
+	<update id="updateSlideImageList" parameterType="java.util.HashMap">
+		<![CDATA[
+		UPDATE REACT.SLIDE
+		SET FILE_NAME = #{FILE_NAME},
+			FILE_ORG_NAME = #{FILE_ORG_NAME},
+			FILE_TYPE = #{FILE_TYPE},
+			FILE_SIZE = #{FILE_SIZE},
+			FILE_DATA = #{FILE_DATA}
+		WHERE REG_SEQ = #{id}		
+		]]>
+	</update>
+	
+	<delete id="deleteSlideImageList" parameterType="java.util.HashMap">
+		<![CDATA[
+		DELETE FROM REACT.SLIDE
+		WHERE REG_SEQ = #{id}		
+		]]>
+	</delete>
+	 
+</mapper>
