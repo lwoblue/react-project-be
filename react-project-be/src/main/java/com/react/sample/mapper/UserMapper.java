@@ -11,6 +11,7 @@ public interface UserMapper {
 	
 	List<UserVO> userList();
 	List<UserVO> searchUser(String keyword);
+	UserVO searchUserByName(String name);
 //	UserVO fatchUserByID(int id);
 	UserVO fatchUserByID(String email);
 	

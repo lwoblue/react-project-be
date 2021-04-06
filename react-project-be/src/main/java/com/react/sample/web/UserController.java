@@ -35,6 +35,12 @@ public class UserController {
 		return userMappr.userList();
 	}
 	
+	@GetMapping("/personal-image/{name}")
+	public UserVO searchUserByName(@PathVariable("name") String name) {
+		return userMappr.searchUserByName(name);
+	}
+
+	
 	@GetMapping("/{keyword}")
 	public List<UserVO> searchUser(@PathVariable String keyword) {
 		return userMappr.searchUser(keyword);

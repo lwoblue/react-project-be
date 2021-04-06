@@ -22,6 +22,11 @@
 		AND email LIKE CONCAT('%', #{keyword}, '%')
 		ORDER BY id
 	</select>
+	<select id="searchUserByName" resultType="com.react.sample.service.vo.UserVO"  parameterType="String">
+		SELECT *
+		FROM users
+		where userName LIKE CONCAT('%', #{name}, '%')
+	</select>
 			
 	<!-- 	
 	<select id="fatchUserByID" resultType="com.react.sample.service.vo.UserVO" parameterType="int">
