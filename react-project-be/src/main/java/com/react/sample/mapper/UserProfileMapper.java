@@ -1,12 +1,14 @@
 package com.react.sample.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
+import java.util.HashMap;
 
-import com.react.sample.service.vo.UserProfileVO;
+import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserProfileMapper {
-	UserProfileVO selectUserProfile(String id);
-	void updateProfile(UserProfileVO userProfile);
-	void insertProfile(UserProfileVO userProfile);
+	HashMap<String, Object> selectUserProfile(String id);
+	int selectUserProfileCnt(String id);	
+	void updateProfile(HashMap<String, Object> userProfile);
+	void insertProfile(HashMap<String, Object> userProfile);
+	HashMap<String, Object> selectphotoURL(String id);
 }

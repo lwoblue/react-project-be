@@ -8,7 +8,16 @@ public class UserProfileVO {
 	String orgname;
 	String userId;
 	String regdate;
-	String imageFile;
+	Blob imageFile;
+	
+	
+	public Blob getImageFile() {
+		return imageFile;
+	}
+	public void setImageFile(Blob imageFile) {
+		this.imageFile = imageFile;
+	}
+	
 	public String getUuid() {
 		return uuid;
 	}
@@ -33,13 +42,4 @@ public class UserProfileVO {
 	public void setRegdate(String regdate) {
 		this.regdate = regdate;
 	}
-	public String getImageFile() {
-		return imageFile;
-	}
-	public void setImageFile(String array) {
-		this.imageFile = array;
-	}
-	
-	
-	
 }

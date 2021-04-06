@@ -1,9 +1,11 @@
 package com.react.sample.service;
 
-import com.react.sample.service.vo.UserProfileVO;
+import java.util.HashMap;
 
 public interface UserProfileService{
-	public UserProfileVO selectUserProfile(String id);
-	public void updateProfile(UserProfileVO userProfile);
-	public void insertProfile(UserProfileVO userProfile);
+	public HashMap<String, Object> selectUserProfile(String id);
+	public int selectUserProfileCnt(String id);
+	public void updateProfile(HashMap<String, Object> userProfile);
+	public void insertProfile(HashMap<String, Object> userProfile);
+	public HashMap<String, Object> selectphotoURL(String id);
 }
