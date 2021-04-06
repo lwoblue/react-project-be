@@ -12,10 +12,11 @@
 	<update id="updateProfile" parameterType="com.react.sample.service.vo.UserProfileVO">
 		<![CDATA[
 		UPDATE thumb
-		SET imageFile = #{imageFile}
-		WHERE uuid = #{uuid}
-		AND userId = #{userId}
-		
+		SET imageFile = #{imageFile},
+			uuid = #{uuid},
+			orgname = #{orgname},
+			regdate = sysdate()		
+		WHERE userId = #{userId}		
 		]]>
 	</update>
 	<insert id="insertProfile" parameterType="com.react.sample.service.vo.UserProfileVO">
