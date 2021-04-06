@@ -27,14 +27,15 @@ public class UserProfileController {
 	UserProfileService profileService;
 
 	@PostMapping(value = "/users/profile/upload")
-	public String getFileandUpload(@RequestParam("file") MultipartFile multipartFile,
-			@RequestParam("userId") String id) {
+//	public String getFileandUpload(@RequestParam("file") MultipartFile multipartFile,@RequestParam("userId") String id) {
+	public byte[] getFileandUpload(@RequestParam("file") MultipartFile multipartFile,@RequestParam("userId") String id) {
 		Gson gson = new GsonBuilder().create();
 		String uid = UUID.randomUUID().toString(); // db처리 주의 -> 길이가 안 맞으면 공백 처리함
 //		File targetFile = new File("c:/tmp/" + uid + "-" + multipartFile.getOriginalFilename()); //  dirSystem.out.println(targetFile);
 		File targetFile = new File("./profile/" + uid + "-" + multipartFile.getOriginalFilename());
 		// file size 설정 - 제한할것
 		File dir = new File("./profile");
+//		File dir = new File("c:/tmp");
 		try {
 			System.out.println("dir.mkdir()" + dir.mkdir());
 			if (!dir.mkdir()) {// C:/tmp not exist
@@ -77,29 +78,14 @@ public class UserProfileController {
 			updateUser.setUserId(id);
 			updateUser.setUuid(uid + "-" + multipartFile.getOriginalFilename());
 			// data base update or insert
-			try {
-				// uid exist? uid 계속 변환?
-				if (profileService.selectUserProfile(id) != null) {
-					System.out.println("update");
-					// yes -> update
-					profileService.updateProfile(updateUser);
-				} else {
-					// no -> insert
-					profileService.insertProfile(updateUser);
-				}
-				System.out.println("targetFile>>>>>" + targetFile.toString());
-				// return copied image url
-				System.out.println(targetFile.toString());
-				return targetFile.toString();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return gson.toJson("false");
+			
 			}
 			// mkdir / file 생성 -> 바로 변환 / 파일명겹치는 경우에 _profile naming
 		} catch (IOException e) {
 			FileUtils.deleteQuietly(targetFile);
 			e.printStackTrace();
-			return "error";
+			byte[] a = "error".getBytes();
+			return a;
 		}
 	}
 }
