@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,78 +22,84 @@ import com.react.sample.service.vo.UserProfileVO;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class UserProfileController {
-	
+
 	@Autowired
 	UserProfileService profileService;
-	
+
 	@PostMapping(value = "/users/profile/upload")
-	public String upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("userId") String id) {
+	public String getFileandUpload(@RequestParam("file") MultipartFile multipartFile,
+			@RequestParam("userId") String id) {
 		Gson gson = new GsonBuilder().create();
-        String uid = UUID.randomUUID().toString(); // db처리 주의  -> 길이가 안 맞으면 공백 처리함
-        File targetFile = new File("c:/tmp/"+"profile_"+multipartFile.getOriginalFilename()); //    ./ dir
-        System.out.println(targetFile);
-        // file size 설정 - 제한할것        
-        File dir = new File("c:/tmp");        
-        try {
-        	if(!dir.mkdir()) {
-        		dir.delete();
-        		targetFile.mkdir();
-        	}        	        	
-            InputStream fileStream = multipartFile.getInputStream(); 
-            // -> byte type change            
-            byte[] userimage =multipartFile.getBytes();
-            String blob = null;
-            
-            try {
-//				 blob = new SerialBlob(userimage);
-        		 blob = userimage.toString();
-				 System.out.println("blob length: "+blob.length());
+		String uid = UUID.randomUUID().toString(); // db처리 주의 -> 길이가 안 맞으면 공백 처리함
+//		File targetFile = new File("c:/tmp/" + uid + "-" + multipartFile.getOriginalFilename()); //  dirSystem.out.println(targetFile);
+		File targetFile = new File("./profile/" + uid + "-" + multipartFile.getOriginalFilename());
+		// file size 설정 - 제한할것
+		File dir = new File("./profile");
+		try {
+			System.out.println("dir.mkdir()" + dir.mkdir());
+			if (!dir.mkdir()) {// C:/tmp not exist
+				dir.delete();
+				targetFile.mkdir();
+			}
+			if (dir.exists()) { // 파일 존재
+				File[] files = dir.listFiles();
+				System.out.println(files.toString());
+				for (int i = 0; i < files.length; i++) {
+					if (files[i].delete()) {
+						System.out.println(files[i].getName() + " 삭제성공");
+					} else {
+						System.out.println(files[i].getName() + " 삭제실패");
+					}
+				}
+			} else {
+				// 파일 없음
+				System.out.println("파일이 존재하지 않습니다.");
+			}
+
+			InputStream fileStream = multipartFile.getInputStream();
+			// -> byte type change
+			byte[] userimage = multipartFile.getBytes();
+			String blob = null;
+			try {
+				blob = userimage.toString();
+				System.out.println("blob length: " + blob.length());
 			} catch (Exception e1) {
 				e1.printStackTrace();
-			}            
-            
-            // field randomUID / originalFileName / binary... / email(forign) / sysdate()
-            FileUtils.copyInputStreamToFile(fileStream, targetFile);            
-                        
-            //insert
-            UserProfileVO updateUser = new UserProfileVO();
-            updateUser.setImageFile(blob);
-            updateUser.setOrgname(multipartFile.getOriginalFilename());
-            updateUser.setUserId(id);
-            updateUser.setUuid(uid);
-            //registration date 
-//            SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss"); // Date format
-//            Date time = new Date();
-//            String regiTime = format1.format(time);            
-//            updateUser.setRegdate(regiTime);
-            // direct 반환 ==> column 추가?
-            
-            //data base update or insert            
-            try {
-            	// uid exist?
-            	if(profileService.selectUserProfile(id) != null) {
-            		// yes -> update
-            		profileService.updateProfile(updateUser);            		
-            	}else {
-            		// no -> insert
-            		profileService.insertProfile(updateUser);            		
-            	}
-    			return gson.toJson("true");
-    		} catch (Exception e) {
-    			e.printStackTrace();
-    			return gson.toJson("false");
-    		}
-            
-            // mkdir / file 생성 -> 바로 변환 / 파일명겹치는 경우에 _profile naming
-
-        } catch (IOException e) {
-            FileUtils.deleteQuietly(targetFile);
-            e.printStackTrace();
-        }
-
-//        Map<String, Object> m = new HashMap<>();
-//        m.put("errorCode", 10);
-//        return m;
-        return "";
-        }
+			}
+			// field randomUID / originalFileName / binary... / email(forign) / sysdate()
+			FileUtils.copyInputStreamToFile(fileStream, targetFile);
+			
+			// insert
+			UserProfileVO updateUser = new UserProfileVO();
+			updateUser.setImageFile(blob);
+			updateUser.setOrgname(multipartFile.getOriginalFilename());
+			System.out.println("multipartFile.getOriginalFilename()::" + multipartFile.getOriginalFilename());
+			updateUser.setUserId(id);
+			updateUser.setUuid(uid + "-" + multipartFile.getOriginalFilename());
+			// data base update or insert
+			try {
+				// uid exist? uid 계속 변환?
+				if (profileService.selectUserProfile(id) != null) {
+					System.out.println("update");
+					// yes -> update
+					profileService.updateProfile(updateUser);
+				} else {
+					// no -> insert
+					profileService.insertProfile(updateUser);
+				}
+				System.out.println("targetFile>>>>>" + targetFile.toString());
+				// return copied image url
+				System.out.println(targetFile.toString());
+				return targetFile.toString();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return gson.toJson("false");
+			}
+			// mkdir / file 생성 -> 바로 변환 / 파일명겹치는 경우에 _profile naming
+		} catch (IOException e) {
+			FileUtils.deleteQuietly(targetFile);
+			e.printStackTrace();
+			return "error";
+		}
+	}
 }
