@@ -33,4 +33,11 @@
 		VALUES(#{uuid}, #{orgname}, #{userId}, #{imageFile})
 		]]>
 	</insert> 
+	<select id="selectphotoURL" resultType="java.util.HashMap" parameterType="String">
+		<![CDATA[
+		SELECT *
+		FROM users
+		WHERE id = #{userId}
+		]]>
+	</select>
 </mapper>

@@ -7,4 +7,5 @@ public interface UserProfileService{
 	public int selectUserProfileCnt(String id);
 	public void updateProfile(HashMap<String, Object> userProfile);
 	public void insertProfile(HashMap<String, Object> userProfile);
+	public HashMap<String, Object> selectphotoURL(String id);
 }

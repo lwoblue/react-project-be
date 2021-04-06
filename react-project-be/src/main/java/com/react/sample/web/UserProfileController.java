@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,6 @@ public class UserProfileController {
 			@RequestParam("userId") String id) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		String uid = UUID.randomUUID().toString(); // db처리 주의 -> 길이가 안 맞으면 공백 처리함
-//		File targetFile = new File("c:/tmp/" + uid + "-" + multipartFile.getOriginalFilename()); //  dirSystem.out.println(targetFile);
 		File targetFile = new File("./profile/" + uid + "-" + multipartFile.getOriginalFilename());
 		
 		// file size 설정 - 제한할것
@@ -64,7 +64,6 @@ public class UserProfileController {
 			updateUser.put("userId", id);
 			updateUser.put("uuid", (uid + "-" + multipartFile.getOriginalFilename()));
 			// data base update or insert
-			
 			try {
 				
 				// uid exist? uid 계속 변환?
@@ -89,6 +88,20 @@ public class UserProfileController {
 			FileUtils.deleteQuietly(targetFile);
 			e.printStackTrace();
 			resultMap.put("result", "error");
+			return resultMap;
+		}
+	}
+	
+	@PostMapping(value = "/users/profile/{userId}")
+	public HashMap<String, Object> getProfile(@PathVariable("userId") String id){
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		if (profileService.selectUserProfileCnt(id) > 0) { // user exist
+			resultMap = profileService.selectUserProfile(id);
+			resultMap.put("message", "localProfile");
+			return resultMap;
+		}else {
+			resultMap = profileService.selectphotoURL(id);
+			resultMap.put("message", "photoURL");
 			return resultMap;
 		}
 	}

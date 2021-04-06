@@ -33,4 +33,10 @@ public class UserProfileServiceImpl implements UserProfileService{
 	public void insertProfile(HashMap<String, Object> userProfile) {
 		userProfileMapper.insertProfile(userProfile);
 	}
+
+	@Override
+	public HashMap<String, Object> selectphotoURL(String userId) {
+		// TODO Auto-generated method stub
+		return userProfileMapper.selectphotoURL(userId);
+	}
 }
