@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,7 @@ public class MainSlideController {
 	MainSlideService mainSlideService;
 
 	@PostMapping("/slide/searchList")
-	public Map<String, Object> searchSlideImageList(@RequestBody Map req) throws Exception {
+	public Map<String, Object> searchSlideImageList() throws Exception {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("resultData", mainSlideService.searchSlideImageList());
 		return resultMap;
@@ -44,9 +45,8 @@ public class MainSlideController {
 		mainSlideService.deleteSlideImageList(paramMap);
 	}
 
-	@PostMapping(value = "/slide/profile/upload")
-	public Map<String, Object> getFileandUpload(@RequestParam("file") MultipartFile multipartFile,
-			@RequestParam("userId") String id) {
+	@PostMapping(value = "/slide/images/upload")
+	public Map<String, Object> getFileandUpload(@RequestParam("file") MultipartFile multipartFile) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		String uid = UUID.randomUUID().toString(); // db처리 주의 -> 길이가 안 맞으면 공백 처리함
 //		File targetFile = new File("c:/tmp/" + uid + "-" + multipartFile.getOriginalFilename()); //  dirSystem.out.println(targetFile);
@@ -55,40 +55,25 @@ public class MainSlideController {
 		// file size 설정 - 제한할것
 		File dir = new File("./profile");
 		try {
-			if (!dir.mkdir()) {// C:/tmp not exist
-				dir.delete();
-				targetFile.mkdir();
-			}
-			if (dir.exists()) { // 파일 존재
-				File[] files = dir.listFiles();
-				System.out.println(files.toString());
-				for (int i = 0; i < files.length; i++) {
-					if (files[i].delete()) {
-						System.out.println(files[i].getName() + " 삭제성공");
-					} else {
-						System.out.println(files[i].getName() + " 삭제실패");
-					}
-				}
-			} else {
-				// 파일 없음
-				System.out.println("파일이 존재하지 않습니다.");
-			}
-
+			
 			InputStream fileStream = multipartFile.getInputStream();
 
 			FileUtils.copyInputStreamToFile(fileStream, targetFile);
-
+			
+			String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
 			// insert
-			HashMap<String, Object> updateUser = new HashMap<String, Object>();
-			updateUser.put("imageFile", multipartFile.getBytes());
-			updateUser.put("orgname", multipartFile.getOriginalFilename());
-			updateUser.put("userId", id);
-			updateUser.put("uuid", (uid + "-" + multipartFile.getOriginalFilename()));
+			HashMap<String, Object> fileMap = new HashMap<String, Object>();
+			fileMap.put("FILE_DATA", multipartFile.getBytes());
+			fileMap.put("FILE_ORG_NAME", multipartFile.getOriginalFilename());
+			fileMap.put("FILE_TYPE", extension);
+			fileMap.put("FILE_NAME", (uid + "-" + multipartFile.getOriginalFilename()));
+			fileMap.put("FILE_SIZE", multipartFile.getSize());
+			
 			// data base update or insert
 
 			try {
 				// no -> insert
-				mainSlideService.insertSlideImageList(updateUser);
+				mainSlideService.insertSlideImageList(fileMap);
 
 				resultMap = mainSlideService.searchSlideImageList();
 				return resultMap;
